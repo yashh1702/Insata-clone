@@ -1,0 +1,1 @@
+Insta-clone App for the understanding of both backend and frontend and how api is created and connected to the frontend part
