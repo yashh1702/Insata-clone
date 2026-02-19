@@ -8,28 +8,8 @@ const imagekit = new ImageKit({
 })
 
 async function createPostController(req, res) {
-
-    /**
-     * Check wether the user has token or not 
-     */
-    const token = req.cookies.token
-    if(!token){
-        return res.status(401).json({
-            message: "Token not provided, Unauthorized access "
-        })
-    }
-
-    let decoded = null;
-    try {
-       decoded = jwt.verify(token,process.env.JWT_SECRET)    
-    } catch (error) {
-       return res.status(401).json({
-        message:"user not authorized"
-       })
-    }
-
     const file = await imagekit.files.upload({
-        file: await toFile(Buffer.from(req.file.buffer),"file"),
+        file: await toFile(Buffer.from(req.file.buffer), "file"),
         fileName: "Test",
         folder: "Insta-clone"
     })
@@ -37,7 +17,7 @@ async function createPostController(req, res) {
     const post = await postModel.create({
         caption: req.body.caption,
         imgUrl: file.url,
-        user: decoded.id
+        user: req.user.id
     })
 
     res.status(201).json({
@@ -46,60 +26,23 @@ async function createPostController(req, res) {
     })
 }
 
-async function getPostController(req,res){
-    const token = req.cookies.token
+async function getPostController(req, res) {
 
-     if(!token){
-        return res.status(401).json({
-           message: "Unauthorized access" 
-        })
-    }
-
-    let decoded;
-    try {
-       decoded = jwt.verify(token,process.env.JWT_SECRET)    
-    } catch (error) {
-       return res.status(401).json({
-        message:"user not authorized"
-       })
-    }
-
-    console.log(decoded)
-
-    const userId = decoded.id
-    console.log(userId)
-
+    const userId = req.user.id
     const posts = await postModel.find({
         user: userId
     })
 
     res.status(200).json({
-        message:"Posts Fetched successfully",
+        message: "Posts Fetched successfully",
         posts
     })
 
 }
 
-async function getPostDetails(req,res){
+async function getPostDetails(req, res) {
 
-    const token = req.cookies.token
-
-    if(!token){
-        return res.status(401).json({
-           message: "Unauthorized access" 
-        })
-    }
-
-    let decoded;
-    try {
-        decoded = jwt.verify(token,process.env.JWT_SECRET)
-    } catch (error) {
-        return res.status(401).json({
-        message:"user not authorized"
-       })
-    }
-
-    const userId = decoded.id
+    const userId = req.user.id
     const postId = req.params.postId
 
     const post = await postModel.findById(postId)
@@ -111,15 +54,16 @@ async function getPostDetails(req,res){
     }
 
     const isValidUser = post.user.toString() == userId
+    //hume toString is lagaya hai kyuki dono toObject mai hote hai aur userId pahle se string mai hai aur hume post wale ko convert krna tha
 
-    if(!isValidUser){
+    if (!isValidUser) {
         return res.status(403).json({
-            message:"Forbidden Content"
+            message: "Forbidden Content"
         })
     }
 
     return res.status(200).json({
-        message:"Post fetched successfully",
+        message: "Post fetched successfully",
         post
     })
 }
