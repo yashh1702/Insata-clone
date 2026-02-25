@@ -34,3 +34,9 @@ export async function login(username,password) {
         throw error
     }
 }
+
+export async function getMe() {
+    const response = await api.get('/get-me')
+
+    return response.data
+}
