@@ -11,6 +11,7 @@ export function useAuth() {
         try {
             const response = await login(username, password)
             setUser(response.user)
+            return response
         } catch (error) {
             console.log(error)
         } finally {
@@ -23,6 +24,7 @@ export function useAuth() {
         try {
             const response = await register(username, email, password)
             setUser(response.user)
+            return response
         } catch (error) {
             console.log(error)
         } finally {
