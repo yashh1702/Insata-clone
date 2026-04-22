@@ -10,15 +10,15 @@ const Login = () => {
     const { handleLogin , loading } = useAuth()
 
     if (loading) {
-        return (<main>
+        return (
             <h1>Loading.....</h1>
-        </main>)
+        )
     }
 
-    function handleSubmit(e) {
+    async function  handleSubmit(e) {
         e.preventDefault()
 
-        handleLogin(username, password).then(res => console.log(res))
+        await handleLogin(username, password).then(res => console.log(res))
         navigate("/")
     }
 
