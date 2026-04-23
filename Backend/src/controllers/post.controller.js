@@ -69,34 +69,45 @@ async function getPostDetails(req, res) {
     })
 }
 
-async function likePostController(req,res){
+async function likePostController(req, res) {
     const username = req.user.username
     const postId = req.params.postId
 
     const post = await postModel.findById(postId)
 
-    if(!post){
+    if (!post) {
         return res.status(404).json({
-            message:"Post not found."
+            message: "Post not found."
         })
     }
 
     const like = await likeModel.create({
-        post:postId,
-        user:username
+        post: postId,
+        user: username
     })
 
     res.status(201).json({
-        message:"Post like successfully",
+        message: "Post like successfully",
         like
     })
 }
 
-async function getFeedController(req,res){
-    const posts = await postModel.find().populate("user")
+async function getFeedController(req, res) {
+
+    const user = req.user
+
+    const posts = await Promise.all((await postModel.find().populate("user").lean()).map(async (post) => {
+        const isLiked = await likeModel.findOne({
+            user:user.username,
+            post:post._id
+        })
+        post.isLiked = Boolean(isLiked)
+        return post 
+    }))
+
 
     res.status(200).json({
-        message:"Posts fetched successfully",
+        message: "Posts fetched successfully",
         posts
     })
 }
