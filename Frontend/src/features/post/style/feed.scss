@@ -12,6 +12,10 @@
 
     .posts{
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
     }
 
     .post{
@@ -20,7 +24,8 @@
         flex-direction: column;
         gap: 0.5rem;
         background-color: #473838;
-        padding: 0.5rem;
+        padding: 0.6rem;
+        border-radius: 3%;
 
         .user{
             display: flex;
@@ -73,6 +78,7 @@
             width: 100%;
             object-fit: cover;
             object-position: center;
+            border-radius: 5%;
         }
        
     }
