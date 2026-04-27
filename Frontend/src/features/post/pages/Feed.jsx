@@ -6,7 +6,7 @@ import Navbar from '../../shared/components/Navbar.jsx'
 
 const Feed = () => {
 
-  const {feed, handleGetFeed,loading} = usePost()
+  const {feed, handleGetFeed,loading, handleLike, handleUnLike} = usePost()
 
   useEffect(()=>{
     handleGetFeed()
@@ -25,7 +25,7 @@ const Feed = () => {
       <Navbar/>
       <div className="feed">
         <div className="posts">
-          {feed.map(post => <Post user={post.user} post={post}/>)}
+          {feed.map(post => <Post user={post.user} post={post} loading={loading} handleLike={handleLike} handleUnLike={handleUnLike}/>)}
         </div>
       </div>
     </main>
