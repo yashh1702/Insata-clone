@@ -28,6 +28,12 @@ postRouter.get("/details/:postId", identifyUser, postController.getPostDetails)
 postRouter.post("/like/:postId", identifyUser, postController.likePostController)
 
 /**
+ * POST /api/posts/unlike/:postid
+ * -unLikes a post with the id provided in the postid
+ */
+postRouter.post("/unlike/:postId", identifyUser, postController.unLikePostController)
+
+/**
  * GET /api/posts/feed
  * -get all the post created in the db
  */
